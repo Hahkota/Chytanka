@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Картки</title>
+<meta name="description" content="Spaced-repetition flashcards for the 2,000 most frequent Ukrainian words.">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/cards.css">
+</head>
+<body>
+<canvas id="rain" aria-hidden="true"></canvas>
+<div class="vignette" id="vig"></div>
+<div class="stage" id="stage" tabindex="0" aria-live="polite">
+  <div class="greet"><span class="txt" id="txt"></span><span class="caret" id="caret"></span></div>
+</div>
+<p class="hint" id="hint">Press <kbd>Enter</kbd> to jack in</p>
+<button class="skip" id="skip" type="button">Skip</button>
+
+<main class="app" id="app" aria-hidden="true">
+  <div class="wrap">
+    <header class="top"><h1>Картки</h1>
+      <div class="level"><span id="known">0 / 2000 learned</span><span class="bar"><i id="barfill"></i></span><span id="streak">0-day streak</span></div></header>
+    <div class="settings" id="settings">
+      <a class="tab" href="index.html">Lessons</a><a class="tab" href="cards.html" aria-current="page" aria-selected="true">Cards</a>
+      <span>Due <b id="sDue">0</b></span><span>New <b id="sNew">0</b></span><span>Left today <b id="sLeft">0</b></span>
+      <span class="np">New per day
+        <button class="mini" id="npDown" type="button" aria-label="Fewer new words per day">−</button><b id="npVal">10</b><button class="mini" id="npUp" type="button" aria-label="More new words per day">+</button></span>
+    </div>
+
+    <section class="deck" id="deck" aria-live="polite">
+      <div class="meta"><span id="cTag">new</span><span id="cRank">#1 of 2000</span></div>
+      <div class="word" id="cWord">я</div>
+      <div class="pos" id="cPos">pron</div>
+      <div class="back" id="back" hidden>
+        <div class="gloss" id="cGloss"></div>
+        <div class="tl" id="cTl"></div>
+      </div>
+      <button class="reveal" id="reveal" type="button">Show English <kbd>Return</kbd></button>
+      <div class="grades" id="grades" hidden>
+        <button class="g again" type="button" data-g="1"><span>Again</span><small id="i1"></small><kbd>1</kbd></button>
+        <button class="g hard" type="button" data-g="2"><span>Hard</span><small id="i2"></small><kbd>2</kbd></button>
+        <button class="g good" type="button" data-g="3"><span>Good</span><small id="i3"></small><kbd>3 / Return</kbd></button>
+        <button class="g easy" type="button" data-g="4"><span>Easy</span><small id="i4"></small><kbd>4</kbd></button>
+      </div>
+    </section>
+
+    <section class="done" id="done" hidden>
+      <h2>Done for today</h2>
+      <p id="doneText"></p>
+      <div class="row"><button class="go" id="more" type="button">Learn 10 more new words</button><button class="replay" id="ahead" type="button">Review tomorrow's cards now</button></div>
+    </section>
+
+    <div class="stats" id="stats"></div>
+    <p class="note">Words are the 2,000 most frequent Ukrainian headwords, ranked with an open subtitle frequency list and glossed from your kaikki.org Wiktionary extract. New words arrive in frequency order and are mixed in among the reviews that are due. Words you miss come back a few cards later; words you know come back after days, then weeks. Underlined letters mark stress. Progress is kept in this browser.</p>
+    <button class="replay" id="replay" type="button">Replay intro</button>
+  </div>
+</main>
+
+<script src="js/words.js"></script>
+<script src="js/cards.js"></script>
+<script>if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+</body>
+</html>

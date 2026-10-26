@@ -1,8 +1,9 @@
 /* Читанка service worker: caches the app so it works offline.
    Bump VERSION whenever you change any file, so visitors get the update. */
-const VERSION = "chytanka-v1";
+const VERSION = "chytanka-v2";
 const FILES = [
-  "./", "index.html", "css/style.css", "js/lessons.js", "js/app.js",
+  "./", "index.html", "cards.html", "css/style.css", "css/cards.css",
+  "js/lessons.js", "js/app.js", "js/words.js", "js/cards.js",
   "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png"
 ];
 
