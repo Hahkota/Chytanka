@@ -86,4 +86,4 @@ Every lesson in `js/lessons.js` has the same shape:
 
 Add a lesson by appending another object to the list. The path, the progress bar and the lexicon pick it up automatically.
 
-After changing any file, bump `VERSION` in `sw.js` (for example `chytanka-v2`) so returning visitors get the new version instead of the cached one.
+Edits show up for returning visitors straight away: when online, the app always fetches the latest files and only falls back to its saved copy offline. If you add or rename a file, add it to the `FILES` list in `sw.js` and bump `VERSION` (for example `chytanka-v4`) so it's also available offline.

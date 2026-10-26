@@ -1,6 +1,7 @@
-/* Читанка service worker: caches the app so it works offline.
-   Bump VERSION whenever you change any file, so visitors get the update. */
-const VERSION = "chytanka-v2";
+/* Читанка service worker.
+   Online: always fetch the latest file and keep a copy. Offline: serve the saved copy.
+   Bump VERSION when the list of files changes. */
+const VERSION = "chytanka-v3";
 const FILES = [
   "./", "index.html", "cards.html", "css/style.css", "css/cards.css",
   "js/lessons.js", "js/app.js", "js/words.js", "js/cards.js",
@@ -21,14 +22,27 @@ self.addEventListener("activate", e => {
 
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
+  const url = new URL(e.request.url);
+  const isFont = /fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
+  if (url.origin !== location.origin && !isFont) return;
+
+  const keep = res => {
+    if (res && (res.ok || res.type === "opaque")) {
+      const copy = res.clone();
+      caches.open(VERSION).then(c => c.put(e.request, copy));
+    }
+    return res;
+  };
+
+  if (isFont) {
+    // fonts never change: saved copy first
+    e.respondWith(caches.match(e.request).then(hit => hit || fetch(e.request).then(keep)));
+    return;
+  }
+  // the app's own files: network first, so updates show straight away
   e.respondWith(
-    caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
-      // keep a copy of the Google Fonts files so the font also works offline
-      if (/fonts\.(googleapis|gstatic)\.com/.test(e.request.url)) {
-        const copy = res.clone();
-        caches.open(VERSION).then(c => c.put(e.request, copy));
-      }
-      return res;
-    }).catch(() => caches.match("index.html")))
+    fetch(e.request, { cache: "no-cache" }).then(keep)
+      .catch(() => caches.match(e.request, { ignoreSearch: true })
+        .then(hit => hit || (e.request.mode === "navigate" ? caches.match("index.html") : undefined)))
   );
 });
