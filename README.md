@@ -10,13 +10,32 @@ A Ukrainian reading course that runs in the browser. Each day you get one lesson
 
 The course has 40 lessons. It starts with three-word sentences and ends with short stories, following the same characters (Olena, Taras, Oksana and Murko the cat) so vocabulary keeps coming back. It assumes you can already read the Cyrillic alphabet.
 
+## Flashcards
+
+`cards.html` is a flashcard trainer for the 2,000 most frequent Ukrainian words. The Ukrainian word shows first; press **Return** to see the English, then grade yourself:
+
+| key | grade | what happens |
+|---|---|---|
+| 1 | Again | the word comes back 2 cards later |
+| 2 | Hard | 4 cards later, or a slightly longer gap for a review |
+| 3 or Return | Good | new words come back once more in the session, then the next day; reviews stretch the gap (×2.5 by default) |
+| 4 | Easy | a longer jump |
+
+Each day brings a set number of new words (10 by default, change it with − / +), always the most frequent unseen word first. They are spread evenly between the reviews that are due, so every few old words you meet a new one. Missed words drop back to learning and return within the session.
+
+The word list comes from a kaikki.org Wiktionary extract (headwords, stress marks, glosses), ranked by the [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) Ukrainian list. Inflected forms are counted toward their dictionary form.
+
 It uses the green-on-black "Construct" theme from Terminal Velocity, including the digital-rain intro.
 
 ## Files
 
 ```
-index.html             page markup
+index.html             lessons page
+cards.html             flashcards page
+js/words.js            the 2,000-word deck
+js/cards.js            spaced-repetition scheduler
 css/style.css          theme and layout
+css/cards.css          flashcard styles
 js/lessons.js          the 40 lessons (all course content lives here)
 js/app.js              progress, unlocking, lesson / path / lexicon views
 sw.js                  offline cache

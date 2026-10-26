@@ -150,3 +150,5 @@ button:focus-visible,input:focus-visible,.stage:focus-visible{outline:2px solid 
   .settings .info{margin-left:0;padding:4px 8px}
 }
 @media (prefers-reduced-motion:reduce){.bar i,.app,.stage,.vignette,.hint{transition:none}}
+
+.settings a.tab{text-decoration:none;display:inline-flex;align-items:center}
