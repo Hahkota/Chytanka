@@ -1,10 +1,10 @@
 /* Читанка service worker.
    Online: always fetch the latest file and keep a copy. Offline: serve the saved copy.
    Bump VERSION when the list of files changes. */
-const VERSION = "chytanka-v3";
+const VERSION = "chytanka-v4";
 const FILES = [
-  "./", "index.html", "cards.html", "css/style.css", "css/cards.css",
-  "js/lessons.js", "js/app.js", "js/words.js", "js/cards.js",
+  "./", "index.html", "cards.html", "reader.html", "css/style.css", "css/cards.css", "css/reader.css",
+  "js/lessons.js", "js/app.js", "js/words.js", "js/cards.js", "js/reader.js",
   "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png"
 ];
 

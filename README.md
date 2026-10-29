@@ -25,6 +25,20 @@ Each day brings a set number of new words (10 by default, change it with − / +
 
 The word list comes from a kaikki.org Wiktionary extract (headwords, stress marks, glosses), ranked by the [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) Ukrainian list. Inflected forms are counted toward their dictionary form.
 
+## Speed reader
+
+`reader.html` shows a Ukrainian text one word at a time (or two or three) in a fixed spot, so your eyes never have to move. The reading area uses a dimmed green with no glow, at under half the brightness of the other pages, for long sessions.
+
+- **Texts:** open a `.txt` file (UTF-8, UTF-16 or older Windows-1251 files all work) or paste text. Each text remembers where you stopped; a short sample story is built in.
+- **Speed:** 60–1000 words per minute in steps of 10 (↑ / ↓ or the buttons). Your speed is remembered.
+- **Moving around:** Space plays or pauses (so does clicking the word); ← / → step; Shift + ← / → jump a sentence; drag the progress bar to go anywhere.
+- **Words at a time:** 1, 2 or 3 (keys 1–3). Groups never run across the end of a sentence.
+- **Rhythm:** slightly longer pauses after commas, full stops, paragraph ends and long words.
+- **Comfort:** a brightness slider and five text sizes, on top of the dim palette.
+- **Reading log:** each session records words read, time, your set speed and your actual speed (including the pauses), so you can track progress.
+
+Texts are kept in the browser's local storage. Very large texts (several MB) may be too big to keep; the page tells you if so.
+
 It uses the green-on-black "Construct" theme from Terminal Velocity, including the digital-rain intro.
 
 ## Files
@@ -32,10 +46,13 @@ It uses the green-on-black "Construct" theme from Terminal Velocity, including t
 ```
 index.html             lessons page
 cards.html             flashcards page
+reader.html            speed reader
 js/words.js            the 2,000-word deck
 js/cards.js            spaced-repetition scheduler
 css/style.css          theme and layout
 css/cards.css          flashcard styles
+css/reader.css         speed-reader styles (dimmed palette)
+js/reader.js           speed reader
 js/lessons.js          the 40 lessons (all course content lives here)
 js/app.js              progress, unlocking, lesson / path / lexicon views
 sw.js                  offline cache

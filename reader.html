@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Швидкочитання</title>
+<meta name="description" content="A comfortable one-word-at-a-time speed reader for Ukrainian texts.">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/reader.css">
+</head>
+<body>
+<canvas id="rain" aria-hidden="true"></canvas>
+<div class="vignette" id="vig"></div>
+<div class="stage" id="stage" tabindex="0" aria-live="polite">
+  <div class="greet"><span class="txt" id="txt"></span><span class="caret" id="caret"></span></div>
+</div>
+<p class="hint" id="hint">Press <kbd>Enter</kbd> to jack in</p>
+<button class="skip" id="skip" type="button">Skip</button>
+
+<main class="app" id="app" aria-hidden="true">
+  <div class="wrap">
+    <header class="top"><h1>Швидкочитання</h1>
+      <div class="level"><span id="hdrWpm">300 wpm</span><span class="bar"><i id="barfill"></i></span><span id="hdrPct">0% read</span></div></header>
+    <nav class="settings" aria-label="Pages"><a class="tab" href="index.html">Lessons</a><a class="tab" href="cards.html">Cards</a><a class="tab" href="reader.html" aria-current="page" aria-selected="true">Reader</a></nav>
+
+    <section class="src" aria-label="Choose a text">
+      <span class="file"><input type="file" id="fileIn" accept=".txt,text/plain" aria-label="Open a Ukrainian text file"><span class="btn" aria-hidden="true">Open .txt file</span></span>
+      <span class="msg ok" id="srcMsg">Plain text in Ukrainian. UTF-8 and older Windows (1251) files both work.</span>
+      <details id="pasteBox"><summary>Or paste text</summary>
+        <textarea id="pasteIn" placeholder="Вставте сюди текст українською…" aria-label="Paste Ukrainian text"></textarea>
+        <div class="row"><button class="btn" id="pasteGo" type="button">Read this text</button></div>
+      </details>
+    </section>
+
+    <section class="reader" aria-label="Reader">
+      <div class="rmeta"><span class="t" id="rTitle">—</span><span><b id="rPos">0</b> / <span id="rTotal">0</span> words · <b id="rLeft">0 min</b> left</span></div>
+      <div class="dimmable" id="dimmable">
+        <div class="rstage" id="rStage" title="Click to pause or play"><div class="rword" id="rWord"></div><span class="rstate" id="rState">paused</span></div>
+        <input class="scrub" id="scrub" type="range" min="0" max="0" value="0" step="1" aria-label="Position in text">
+        <div class="rctx" id="rCtx" aria-live="off"></div>
+      </div>
+      <div class="ctrls">
+        <div class="grp" role="group" aria-label="Moving through the text">
+          <button class="btn" id="sentBack" type="button" aria-label="Previous sentence" title="Previous sentence (Shift + ←)">⏮</button>
+          <button class="btn" id="wordBack" type="button" aria-label="Back one step" title="Back (←)">◀</button>
+          <button class="btn play" id="playBtn" type="button">Play</button>
+          <button class="btn" id="wordFwd" type="button" aria-label="Forward one step" title="Forward (→)">▶</button>
+          <button class="btn" id="sentFwd" type="button" aria-label="Next sentence" title="Next sentence (Shift + →)">⏭</button>
+        </div>
+        <div class="grp" role="group" aria-label="Speed">
+          <span class="cl">Speed</span>
+          <button class="btn" id="slower" type="button" aria-label="Slower by 10 words per minute">−10</button>
+          <b id="wpmVal">300</b><span class="cl">wpm</span>
+          <button class="btn" id="faster" type="button" aria-label="Faster by 10 words per minute">+10</button>
+        </div>
+        <div class="grp" role="group" aria-label="Words at a time">
+          <span class="cl">Words</span>
+          <button class="btn" type="button" data-chunk="1" aria-pressed="true">1</button>
+          <button class="btn" type="button" data-chunk="2" aria-pressed="false">2</button>
+          <button class="btn" type="button" data-chunk="3" aria-pressed="false">3</button>
+        </div>
+        <div class="grp" role="group" aria-label="Text size">
+          <span class="cl">Size</span>
+          <button class="btn" id="smaller" type="button" aria-label="Smaller text">A−</button>
+          <button class="btn" id="bigger" type="button" aria-label="Larger text">A+</button>
+        </div>
+        <div class="grp">
+          <label class="cl" for="bright">Brightness</label>
+          <input type="range" id="bright" min="60" max="130" step="5" value="100">
+          <b id="brightVal">100%</b>
+        </div>
+      </div>
+      <div class="keys" aria-hidden="true"><span><kbd>Space</kbd> play / pause</span><span><kbd>←</kbd> <kbd>→</kbd> step</span><span><kbd>Shift</kbd>+<kbd>←</kbd> <kbd>→</kbd> sentence</span><span><kbd>↑</kbd> <kbd>↓</kbd> speed ±10</span><span><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> words at a time</span></div>
+    </section>
+
+    <div class="cols">
+      <section class="sec"><h2>Your texts</h2><div class="lib" id="lib"></div></section>
+      <section class="sec"><h2>Reading log</h2>
+        <div class="statline" id="sessLine"></div>
+        <div class="hist" id="hist"></div>
+      </section>
+    </div>
+
+    <p class="note">Each text remembers where you stopped. Speed is the rate you set; "actual" in the log includes the short pauses at commas and full stops, so it runs a little lower. Texts and progress are kept in this browser only.</p>
+    <button class="replay" id="replay" type="button">Replay intro</button>
+  </div>
+</main>
+
+<script src="js/reader.js"></script>
+<script>if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+</body>
+</html>
